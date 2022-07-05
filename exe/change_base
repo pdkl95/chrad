@@ -1,3 +1,111 @@
 #!/usr/bin/env ruby
 
-require "change_base"
+require 'change_base'
+require 'optparse'
+
+options = ChangeBase::Options.new
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Converts integers into a different base (radix)."
+  opts.define_head "Usage: #{$0} [options] <number> [...]"
+  opts.summary_width = 24
+  opts.summary_indent = '  '
+
+  opts.separator ''
+  opts.separator 'OPTIONS'
+
+  opts.on('-iBASE', '--input=BASE',
+          'Interpret input strings integers in base <BASE>'
+         ) do |base|
+    options.input.base = base
+  end
+
+  opts.on('-oBASE', '--output=BASE',
+          'Print converted numbers as integers in base <BASE>'
+         ) do |base|
+    options.output.base = base
+  end
+
+
+  opts.separator ''
+
+  opts.on('--input-list',
+          'Input values as delimiter separated lists'
+         ) do
+    options.input.mode = :list
+  end
+
+  opts.on('--output-list',
+          'Output values as delimiter separated lists'
+         ) do
+    options.output.mode = :list
+  end
+
+  opts.on('-l', '--list',
+          'Both input and output values as delimiter separated lists',
+          '(Shorthand for using both --input-list and --output-list)'
+         ) do
+    options.input.mode = :list
+    options.output.mode = :list
+  end
+
+  opts.on('--input-separator=CHAR',
+          'Use <CHAR> as the delimiter between places',
+          'in input vales when using --input-list mode'
+         ) do |sep|
+    options.input.separator = sep
+  end
+
+  opts.on('--output-separator=CHAR',
+          'Use <CHAR> as the delimiter between places',
+          'in output vales when using --output-list mode'
+         ) do |sep|
+    options.output.separator = sep
+  end
+
+  opts.on('-s', '--separator=CHAR',
+          'Use <CHAR> as the delimiter between places in both',
+          'input and output list modes. (shothand for using',
+          'both --input-separator=CHAR and --output-separator=CHAR)'
+         ) do |sep|
+    options.input.separator = sep
+    options.output.separator = sep
+  end
+
+  opts.separator ''
+
+  opts.on('-h', '--help', 'Show this help message') do
+    puts opts
+    puts <<USAGE_END
+
+
+USAGE_END
+
+    exit
+  end
+
+  opts.on('--version', 'Show version') do
+    puts Factoradic::VERSION
+    exit
+  end
+end
+
+optparse.parse!
+
+if ARGV.length > 0
+  unless ARGV.first == '-'
+    options.input.stream = ARGV
+  end
+else
+  puts optparse
+  exit 1
+end
+
+options.input.parse_base!
+options.output.parse_base!
+
+options.input.stream.each do |arg|
+  number = Bases.val(arg).in_base(options.input.base)
+  conv_str = number.to_base(options.output.base)
+  options.output.stream.puts conv_str
+end
