@@ -3,7 +3,8 @@
 require 'change_base'
 require 'optparse'
 
-options = ChangeBase::Options.new
+input  = InputManager.new
+output = OutputManager.new
 
 optparse = OptionParser.new do |opts|
   opts.banner = "Converts integers into a different base (radix)."
@@ -17,13 +18,13 @@ optparse = OptionParser.new do |opts|
   opts.on('-iBASE', '--input=BASE',
           'Interpret input strings integers in base <BASE>'
          ) do |base|
-    options.input.base = base
+    input.base = base
   end
 
   opts.on('-oBASE', '--output=BASE',
           'Print converted numbers as integers in base <BASE>'
          ) do |base|
-    options.output.base = base
+    output.base = base
   end
 
 
@@ -32,35 +33,35 @@ optparse = OptionParser.new do |opts|
   opts.on('--input-list',
           'Input values as delimiter separated lists'
          ) do
-    options.input.mode = :list
+    input.mode = :list
   end
 
   opts.on('--output-list',
           'Output values as delimiter separated lists'
          ) do
-    options.output.mode = :list
+    output.mode = :list
   end
 
   opts.on('-l', '--list',
           'Both input and output values as delimiter separated lists',
           '(Shorthand for using both --input-list and --output-list)'
          ) do
-    options.input.mode = :list
-    options.output.mode = :list
+    input.mode = :list
+    output.mode = :list
   end
 
   opts.on('--input-separator=CHAR',
           'Use <CHAR> as the delimiter between places',
           'in input vales when using --input-list mode'
          ) do |sep|
-    options.input.separator = sep
+    input.separator = sep
   end
 
   opts.on('--output-separator=CHAR',
           'Use <CHAR> as the delimiter between places',
           'in output vales when using --output-list mode'
          ) do |sep|
-    options.output.separator = sep
+    output.separator = sep
   end
 
   opts.on('-s', '--separator=CHAR',
@@ -68,8 +69,8 @@ optparse = OptionParser.new do |opts|
           'input and output list modes. (shothand for using',
           'both --input-separator=CHAR and --output-separator=CHAR)'
          ) do |sep|
-    options.input.separator = sep
-    options.output.separator = sep
+    input.separator = sep
+    output.separator = sep
   end
 
   opts.separator ''
@@ -94,18 +95,17 @@ optparse.parse!
 
 if ARGV.length > 0
   unless ARGV.first == '-'
-    options.input.stream = ARGV
+    input.stream = ARGV
   end
 else
   puts optparse
   exit 1
 end
 
-options.input.parse_base!
-options.output.parse_base!
+input.setup_base_digits!
+output.setup_base_digits!
 
-options.input.stream.each do |arg|
-  number = Bases.val(arg).in_base(options.input.base)
-  conv_str = number.to_base(options.output.base)
-  options.output.stream.puts conv_str
+input.stream.each do |arg|
+  number = input.parse(arg)
+  output.puts(number)
 end
