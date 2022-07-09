@@ -3,8 +3,8 @@
 require 'change_base'
 require 'optparse'
 
-input  = InputManager.new
-output = OutputManager.new
+input  = ChangeBase::InputManager.new
+output = ChangeBase::OutputManager.new
 
 optparse = OptionParser.new do |opts|
   opts.banner = "Converts integers into a different base (radix)."
@@ -86,7 +86,7 @@ USAGE_END
   end
 
   opts.on('--version', 'Show version') do
-    puts Factoradic::VERSION
+    puts ChangeBase::VERSION
     exit
   end
 end
@@ -107,5 +107,5 @@ output.setup_base_digits!
 
 input.stream.each do |arg|
   number = input.parse(arg)
-  output.puts(number)
+  output.stream_puts(number)
 end
