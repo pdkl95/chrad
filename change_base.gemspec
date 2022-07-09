@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Brent Sanders"]
   spec.email = ["git@gmail.com"]
 
-  spec.summary = %q{Command line util to cange integer base}
-  spec.description = %q{A commsnd line interface for the 'bases' gem.}
+  spec.summary = %q{Command line util to change integer base}
+  spec.description = %q{A commsnd line utility to convert integers into arbitrary bases.}
 
   spec.homepage = "https://github.com/pdkl95/change_base"
   spec.license = "MIT"
@@ -29,6 +29,4 @@ Gem::Specification.new do |spec|
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
-
-  spec.add_dependency "bases", "~> 1.0"
 end
