@@ -1,9 +1,10 @@
 require_relative 'algorithms'
+require 'byebug'
 
 module ChangeBase
   class IOManager
     attr_accessor :stream, :base
-    attr_writer :mode, :alphabet, :separator
+    attr_writer :mode, :separator
 
     def mode
       @mode ||= DEFAULT_MODE
@@ -28,6 +29,19 @@ module ChangeBase
       @alphabet ||= DEFAULT_ALPHABET
     end
 
+    def alphabet=(str)
+      @alphabet = automagic_find_alphabet(str)
+    end
+
+    def automagic_find_alphabet(str)
+      case str
+      when /\Aname:(\w+)\Z/
+        Alphabet[$1] or raise Error, "No digit alphabet named \"#{$1}\""
+      else
+        Alphabet.new("custom_#{name}", str)
+      end
+    end
+
     def setup_base_digits!
       case mode
       when :alphabet
@@ -35,7 +49,7 @@ module ChangeBase
           raise Error, "Trying to use base #{base}, but the #{input} alphabet only has #{alphabet.length} characters."
         end
 
-        @base_characters = alphabet[0, base]
+        @digits = alphabet[0, base]
 
       when :list
         # not needed in :list mode
@@ -43,6 +57,11 @@ module ChangeBase
       else
         raise Error, "Invalid mode #{mode.inspect}"
       end
+    end
+
+    def value_to_digit(value)
+      raise Error, '@digits == nil' if @digits.nil?
+      @digits[value]
     end
   end
 
@@ -86,22 +105,15 @@ module ChangeBase
     end
 
     def number_to_string(number)
-      puts "algo(#{number.inspect}, #{base}"
       list = Algorithms.number_to_base(number, base)
-      puts 'list'
-      puts list.inspect
+
       case mode
       when :alphabet
-        puts 'io'
-        puts number.inspect
-        puts number.class
-        puts 'base'
-        puts base.inspect
-        puts base.class
-        number.to_i(base)
+        list.map do |value|
+          value_to_digit(value)
+        end.reverse.join('')
 
       when :list
-
         list.join(separator)
 
       else

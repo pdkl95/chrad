@@ -8,12 +8,13 @@ output = ChangeBase::OutputManager.new
 
 optparse = OptionParser.new do |opts|
   opts.banner = "Converts integers into a different base (radix)."
-  opts.define_head "Usage: #{$0} [options] <number> [...]"
+  opts.define_head "Usage: #{$0} [options] -i <input_base> -o <output_base> <number> [...]"
   opts.summary_width = 24
   opts.summary_indent = '  '
 
   opts.separator ''
-  opts.separator 'OPTIONS'
+  opts.separator 'REQUIRED OPTIONS'
+  opts.separator ''
 
   opts.on('-iBASE', '--input=BASE',
           'Interpret input strings integers in base <BASE>'
@@ -28,6 +29,8 @@ optparse = OptionParser.new do |opts|
   end
 
 
+  opts.separator ''
+  opts.separator 'INPUT/OUTPUT FORMAT'
   opts.separator ''
 
   opts.on('--input-list',
@@ -50,14 +53,14 @@ optparse = OptionParser.new do |opts|
     output.mode = :list
   end
 
-  opts.on('--input-separator=CHAR',
+  opts.on('--input-sep=CHAR',
           'Use <CHAR> as the delimiter between places',
           'in input vales when using --input-list mode'
          ) do |sep|
     input.separator = sep
   end
 
-  opts.on('--output-separator=CHAR',
+  opts.on('--output-sep=CHAR',
           'Use <CHAR> as the delimiter between places',
           'in output vales when using --output-list mode'
          ) do |sep|
@@ -74,14 +77,30 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.separator ''
+  opts.separator 'DIGIT ALPHABET'
+  opts.separator ''
+
+  opts.on('--input-digits=STR',
+          'Use the given <STR> as the set of chars to use',
+          'when interpreting input integers.',
+          '(Ignored when using--input-list mode.)'
+         ) do |str|
+    input.alphabet = str
+  end
+
+  opts.on('--output-digits=STR',
+          'Use the given <STR> as the set of chars to use',
+          'when printing number in the output base.',
+          '(Ignored when using--input-list mode.)'
+         ) do |str|
+    output.alphabet = str
+  end
+
+
+  opts.separator ''
 
   opts.on('-h', '--help', 'Show this help message') do
     puts opts
-    puts <<USAGE_END
-
-
-USAGE_END
-
     exit
   end
 

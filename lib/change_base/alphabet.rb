@@ -12,6 +12,11 @@ module ChangeBase
       ('2'..'7').to_a
     )
 
+    B16 = (
+      ('0'..'9').to_a +
+      ('a'..'f').to_a
+    )
+
     def self.all
       @all ||= Hash.new
     end
@@ -24,6 +29,7 @@ module ChangeBase
     add :base64,    B62 + %w(+ /)
     add :base64url, B62 + %w(- _)
     add :base32,    B32
+    add :base16,    B16
 
     def self.[](idx)
       all[idx]
@@ -32,6 +38,7 @@ module ChangeBase
     def self.names
       all.keys
     end
+
 
     attr_reader :name, :digits
 

@@ -16,5 +16,5 @@ require_relative 'change_base/alphabet'
 require_relative 'change_base/io_manager'
 
 module ChangeBase
-  DEFAULT_ALPHABET = Alphabet[:base64]
+  DEFAULT_ALPHABET = Alphabet[:base16]
 end
