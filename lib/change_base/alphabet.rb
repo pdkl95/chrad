@@ -7,9 +7,14 @@ module ChangeBase
       (0..9).to_a.map(&:to_s)
     )
 
-    B32 = (
+    B32rfc = (
       ('A'..'Z').to_a +
       ('2'..'7').to_a
+    )
+
+    B32 = (
+      ('0'..'9').to_a +
+      ('a'..'v').to_a
     )
 
     B16 = (
@@ -22,22 +27,27 @@ module ChangeBase
     end
 
     def self.add(name, digits)
-      all[name] = digits
+      all[name.to_s] = digits
     end
 
-    add :base62,    B62
-    add :base64,    B62 + %w(+ /)
-    add :base64url, B62 + %w(- _)
-    add :base32,    B32
-    add :base16,    B16
+    def self.find(name)
+      all[name.to_s]
+    end
 
-    def self.[](idx)
-      all[idx]
+    def self.[](name)
+      find(name)
     end
 
     def self.names
       all.keys
     end
+
+    add :base62,    B62
+    add :base64,    B62 + %w(+ /)
+    add :base64url, B62 + %w(- _)
+    add :base32rfc, B32rfc
+    add :base32,    B32
+    add :base16,    B16
 
 
     attr_reader :name, :digits
@@ -71,6 +81,10 @@ module ChangeBase
 
     def [](idx)
       digits[idx]
+    end
+
+    def to_s
+      digits.join('')
     end
   end
 end

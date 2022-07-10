@@ -36,7 +36,7 @@ module ChangeBase
     def automagic_find_alphabet(str)
       case str
       when /\Aname:(\w+)\Z/
-        Alphabet[$1] or raise Error, "No digit alphabet named \"#{$1}\""
+        Alphabet.find($1) or raise Error, "No digit alphabet named \"#{$1}\""
       else
         Alphabet.new("custom_#{name}", str)
       end
@@ -46,7 +46,7 @@ module ChangeBase
       case mode
       when :alphabet
         if base > alphabet.length
-          raise Error, "Trying to use base #{base}, but the #{input} alphabet only has #{alphabet.length} characters."
+          raise Error, "Trying to use base #{base}, but the input alphabet only has #{alphabet.length} characters."
         end
 
         @digits = alphabet[0, base]
@@ -68,7 +68,7 @@ module ChangeBase
   class InputManager < IOManager
     def initialize
       @base = DEFAULT_INPUT_BASE
-      @stream = STDIN
+      @stream = $stdin
     end
 
     def name
@@ -97,7 +97,7 @@ module ChangeBase
   class OutputManager < IOManager
     def initialize
       @base = DEFAULT_OUTPUT_BASE
-      @stream = STDOUT
+      @stream = $stdout
     end
 
     def name
