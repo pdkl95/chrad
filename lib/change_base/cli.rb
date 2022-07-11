@@ -122,6 +122,18 @@ module ChangeBase
 
         opts.separator ''
 
+        opts.on('--list-named-digits',
+                'List the built-in named digit sets. These names',
+                'can be passed to any of --digits, --input-digits,',
+                'or --output-digits using the \"name:\" prefix.',
+                '(example: \"--digits=base64\")'
+               ) do
+          Alphabet.all.each_pair do |name, digits|
+            puts "name:#{name}\t#{digits.join('')}"
+          end
+          exit
+        end
+
         opts.on('-h', '--help', 'Show this help message') do
           puts opts
           exit

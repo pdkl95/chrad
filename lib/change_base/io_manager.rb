@@ -80,7 +80,11 @@ module ChangeBase
       case mode
       when :alphabet
         str.reverse.each_char.map.with_index do |c, idx|
-          digits.index(c) * (base ** idx)
+          value = digits.index(c)
+          if value.nil?
+            raise Error, "Input digit #{c.inspect} is not a valid input digit (expected: #{digits.join('')})"
+          end
+          value * (base ** idx)
         end.reduce(&:+)
 
       when :list
