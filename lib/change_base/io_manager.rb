@@ -85,8 +85,10 @@ module ChangeBase
         end
 
       when :list
-        #digits = str.split(separator)
-        raise Error, 'FIXME'
+        digits = str.split(separator).reverse
+        digits.map.with_index do |x,idx|
+          x.to_i * (base ** idx)
+        end.reduce(&:+)
 
       else
         raise Error, "Invalid mode #{mode.inspect}"
@@ -106,12 +108,13 @@ module ChangeBase
 
     def number_to_string(number)
       list = Algorithms.number_to_base(number, base)
+      list.reverse!
 
       case mode
       when :alphabet
         list.map do |value|
           value_to_digit(value)
-        end.reverse.join('')
+        end.join('')
 
       when :list
         list.join(separator)
