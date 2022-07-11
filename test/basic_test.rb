@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class TestChangeBase < ChangeBaseTest
+class TestBasicChangeBase < ChangeBaseTest
   def test_it_can_do_simple_base_10_conversions
     assert_all_base_changes   10, '1275',     2, '10011111011'
     assert_all_base_changes   10, '1275',     4,      '103323'

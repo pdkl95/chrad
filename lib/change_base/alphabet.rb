@@ -73,14 +73,20 @@ module ChangeBase
             new_digits.push ch.to_s
           end
         end
+
+        @digits = new_digits
         
       else
         raise Error, "Cannot set digits from a \"${value}\". Expected a list of digits as a String or Array"
       end
     end
 
-    def [](idx)
-      digits[idx]
+    def [](*args)
+      digits[*args]
+    end
+
+    def length
+      digits.length
     end
 
     def to_s

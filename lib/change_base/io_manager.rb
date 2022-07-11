@@ -5,6 +5,7 @@ module ChangeBase
   class IOManager
     attr_accessor :stream, :base
     attr_writer :mode, :separator
+    attr_reader :digits
 
     def mode
       @mode ||= DEFAULT_MODE
@@ -78,11 +79,9 @@ module ChangeBase
     def parse(str)
       case mode
       when :alphabet
-        if base >= 2 && base <= 32
-          str.to_i(base)
-        else
-          raise Error, "Input base #{input.base} isn't supported yet; currently only bases between 2 and 36."
-        end
+        str.reverse.each_char.map.with_index do |c, idx|
+          digits.index(c) * (base ** idx)
+        end.reduce(&:+)
 
       when :list
         digits = str.split(separator).reverse

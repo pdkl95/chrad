@@ -43,9 +43,11 @@ class ChangeBaseTest <  Minitest::Test
 
     args = [ '-i', ibase, '-o', obase, ivalue]
 
-    args.concat(['-d', opt[:digirs].to_s])     if opt.has_key?(:digits)
-    args.concat(['-d', "name:#{opt[:dname]}"]) if opt.has_key?(:dname)
-    args.concat(opt[:args])                    if opt.has_key?(:args)
+    args.concat(['-d', opt[:digits].to_s])            if opt.has_key?(:digits)
+    args.concat(['-d', "name:#{opt[:dname]}"])        if opt.has_key?(:dname)
+    args.concat(["--input-digits=#{opt[:idigits]}"])  if opt.has_key?(:idigits)
+    args.concat(["--output-digits=#{opt[:odigits]}"]) if opt.has_key?(:odigits)
+    args.concat(opt[:args])                           if opt.has_key?(:args)
 
     result = run_change_base(args)
     assert_equal ovalue, result, msg

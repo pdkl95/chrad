@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class TestChangeBase < ChangeBaseTest
+class TestListChangeBase < ChangeBaseTest
   def assert_changes_base_to_list(*args)
     assert_changes_base(*args, args: ['--output-list'])
   end
