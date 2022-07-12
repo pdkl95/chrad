@@ -164,14 +164,17 @@ module ChRad
           end
         end
       else
-        puts optparse
-        exit 1
+        unless input.force_stdin
+          puts optparse
+          exit 1
+        end
       end
 
       input.setup_base_digits!
       output.setup_base_digits!
 
       input.stream.each do |arg|
+        arg = arg.chomp
         number = input.parse(arg)
         output.stream_puts(number)
       end
