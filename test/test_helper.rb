@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
-require "change_base"
-require "change_base/cli"
+require "chrad"
+require "chrad/cli"
 
 require "minitest/autorun"
 
 
-class ChangeBaseTest <  Minitest::Test
+class ConvBaseTest <  Minitest::Test
   make_my_diffs_pretty!
 
-  def run_change_base(opts)
+  def run_chrad(opts)
     out, err = capture_io do
-      ChangeBase::CLI.new(opts).run!
+      ChRad::CLI.new(opts).run!
     end
     assert_empty err, 'nothing shoule be written to STDOUT'
     out.chomp!
     out
   end
 
-  def assert_changes_base(ibase, ivalue, obase, ovalue, *other)
+  def assert_conv_base(ibase, ivalue, obase, ovalue, *other)
     msg = nil
     opt = {}
 
@@ -49,12 +49,12 @@ class ChangeBaseTest <  Minitest::Test
     args.concat(["--output-digits=#{opt[:odigits]}"]) if opt.has_key?(:odigits)
     args.concat(opt[:args])                           if opt.has_key?(:args)
 
-    result = run_change_base(args)
+    result = run_chrad(args)
     assert_equal ovalue, result, msg
   end
 
-  def assert_all_base_changes(ibase, ivalue, obase, ovalue, *other)
-    assert_changes_base ibase, ivalue, obase, ovalue, *other
-    assert_changes_base obase, ovalue, ibase, ivalue, *other
+  def assert_all_base_conv(ibase, ivalue, obase, ovalue, *other)
+    assert_conv_base ibase, ivalue, obase, ovalue, *other
+    assert_conv_base obase, ovalue, ibase, ivalue, *other
   end
 end

@@ -1,5 +1,4 @@
-
-module ChangeBase
+module ChRad
   class Alphabet
     B62 = (
       ('A'..'Z').to_a +

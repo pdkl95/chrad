@@ -1,7 +1,7 @@
-require 'change_base'
+require 'chrad'
 require 'optparse'
 
-module ChangeBase
+module ChRad
   class CLI
     attr_reader :argv
 
@@ -12,11 +12,11 @@ module ChangeBase
     end
 
     def input
-      @input ||= ChangeBase::InputManager.new
+      @input ||= ChRad::InputManager.new
     end
 
     def output
-      @output ||= ChangeBase::OutputManager.new
+      @output ||= ChRad::OutputManager.new
     end
 
     def optparse
@@ -122,6 +122,14 @@ module ChangeBase
 
         opts.separator ''
 
+        opts.on('--stdin',
+                'Read one number per line from STDIN instead',
+                'of ARGV. Equivalent to using the single',
+                'character "-" as the first arg.'
+               ) do
+          input.force_stdin = true 
+        end
+
         opts.on('--list-named-digits',
                 'List the built-in named digit sets. These names',
                 'can be passed to any of --digits, --input-digits,',
@@ -140,7 +148,7 @@ module ChangeBase
         end
 
         opts.on('--version', 'Show version') do
-          puts ChangeBase::VERSION
+          puts ChRad::VERSION
           exit
         end
       end
@@ -151,7 +159,9 @@ module ChangeBase
 
       if argv.length > 0
         unless argv.first == '-'
-          input.stream = argv
+          unless input.force_stdin
+            input.stream = argv            
+          end
         end
       else
         puts optparse

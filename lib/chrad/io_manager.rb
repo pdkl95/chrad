@@ -1,7 +1,6 @@
 require_relative 'algorithms'
-require 'byebug'
 
-module ChangeBase
+module ChRad
   class IOManager
     attr_accessor :stream, :base
     attr_writer :mode, :separator
@@ -67,9 +66,12 @@ module ChangeBase
   end
 
   class InputManager < IOManager
+    attr_accessor :force_stdin
+
     def initialize
       @base = DEFAULT_INPUT_BASE
       @stream = $stdin
+      @force_stdin = false
     end
 
     def name

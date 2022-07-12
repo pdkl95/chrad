@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'change_base/cli'
-
-ChangeBase::CLI.new(ARGV).run!

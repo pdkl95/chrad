@@ -1,12 +1,12 @@
-# Change Base
+# ChRad
 
-A command line utility to convert integer bases.
+Change Radix. A command line utility to convert integer bases.
 
 ## Installation
 
 Run:
 
-    gem install change_base
+    gem install chrad
 
 
 ## Usage
@@ -16,7 +16,7 @@ Run:
 #### Options
 
 ```
-Usage: exe/change_base [options] -i <input_base> -o <output_base> <number> [...]
+Usage: chrad [options] -i <input_base> -o <output_base> <number> [...]
 
 REQUIRED OPTIONS
 
@@ -60,21 +60,22 @@ DIGIT ALPHABET
 #### Examples
 
 ```
-$ change_base -i 10 -o 16 255
+$ chrad -i 10 -o 16 255
 ff
 
-$ change_base -i 16 -o 2 c9
+$ chrad -i 16 -o 2 c9
 11001001
 
-$ change_base -i 10 -o 64 --output-digits=name:base64 129633344153503
+$ chrad -i 10 -o 64 --output-digits=name:base64 129633344153503
 deadbeef
 
-$ change_base -i 10 -o 64 --output-list 129633344153503
+$ chrad -i 10 -o 64 --output-list 129633344153503
 29,30,26,29,27,30,30,31
 
-$ change_base -i 64 -o 64 --input-list --output-digits=name:base64 29,30,26,29,27,30,30,31
+$ chrad -i 64 -o 64 --input-list --output-digits=name:base64 29,30,26,29,27,30,30,31
 deadbeef
-$ change_base -i 10 -o 4 --output-digits='♠♡♢♣' 4321
+
+$ chrad -i 10 -o 4 --output-digits='♠♡♢♣' 4321
 ♡♠♠♣♢♠♡
 ```
 
@@ -87,7 +88,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/pdkl95/change_base.
+Bug reports and pull requests are welcome on GitHub at https://github.com/pdkl95/chrad.
 
 ## License
 

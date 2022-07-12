@@ -1,15 +1,15 @@
-require_relative "lib/change_base/version"
+require_relative "lib/chrad/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "change_base"
-  spec.version = ChangeBase::VERSION
+  spec.name = "chrad"
+  spec.version = ChRad::VERSION
   spec.authors = ["Brent Sanders"]
   spec.email = ["git@gmail.com"]
 
-  spec.summary = %q{Command line util to change integer base}
+  spec.summary = %q{Command line util to convert integer base}
   spec.description = %q{A commsnd line utility to convert integers into arbitrary bases.}
 
-  spec.homepage = "https://github.com/pdkl95/change_base"
+  spec.homepage = "https://github.com/pdkl95/chrad"
   spec.license = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
 

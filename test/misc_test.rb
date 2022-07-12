@@ -2,8 +2,8 @@
 
 require "test_helper"
 
-class TestChangeMisc < ChangeBaseTest
+class TestMisc < ConvBaseTest
   def test_that_it_has_a_version_number
-    refute_nil ::ChangeBase::VERSION
+    refute_nil ::ChRad::VERSION
   end
 end

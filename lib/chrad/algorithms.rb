@@ -1,4 +1,4 @@
-module ChangeBase
+module ChRad
   module Algorithms
     def self.number_to_base(number, base)
       if number == 0

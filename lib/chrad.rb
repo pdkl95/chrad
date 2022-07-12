@@ -1,6 +1,6 @@
-require_relative "change_base/version"
+require_relative "chrad/version"
 
-module ChangeBase
+module ChRad
   class Error < StandardError; end
   class InvalidInputError < Error; end
 
@@ -12,9 +12,9 @@ module ChangeBase
   DEFAULT_SEPARATOR = ','
 end
 
-require_relative 'change_base/alphabet'
-require_relative 'change_base/io_manager'
+require_relative 'chrad/alphabet'
+require_relative 'chrad/io_manager'
 
-module ChangeBase
+module ChRad
   DEFAULT_ALPHABET = Alphabet[:base16]
 end
