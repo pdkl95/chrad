@@ -2,6 +2,18 @@
 
 Change Radix. A command line utility to convert integer bases.
 
+Arbitrarily large numbers are supported thanks to ruby's built-in
+support for bignums. Conversion to or from any positive integer fixed
+base system is supported.
+
+Mixed-radix systems are not supported. For converting numbers in the factoradic
+(factorial base) system, use my [factoradic gem][fact_gem] or [faster c utility][c_util].
+
+[fact_gem]: https://github.com/pdkl95/factoradic
+
+[c_util]: https://github.com/pdkl95/factoradic_c_utils
+
+
 ## Installation
 
 Run:
@@ -34,7 +46,7 @@ INPUT/OUTPUT FORMAT
       --output-sep=CHAR    Use <CHAR> as the delimiter between places
                            in output vales when using --output-list mode
   -s, --separator=CHAR     Use <CHAR> as the delimiter between places in both
-                           input and output list modes. (shothand for using
+                           input and output list modes. (shorthand for using
                            both --input-separator=CHAR and --output-separator=CHAR)
 
 DIGIT ALPHABET
@@ -57,6 +69,7 @@ DIGIT ALPHABET
       --version            Show version
 ```
 
+
 #### Examples
 
 ```
@@ -77,6 +90,86 @@ deadbeef
 
 $ chrad -i 10 -o 4 --output-digits='♠♡♢♣' 4321
 ♡♠♠♣♢♠♡
+
+$ print3nums() { echo 255 ; echo 65535 ; echo 16777215 ; }
+$ print3nums | chrad -i 10 -o 16 --stdin
+ff
+ffff
+ffffff
+```
+
+
+### Input/Output
+
+To represent a number in a given base, a set of digits must be available
+that is at least as large as that base. To support this, chrad allows
+you to provide a string of characters to use for input, output, or
+both (with `--input-digits`, `--output-digits`, and `--digits`
+respectively).
+
+```
+$ chrad -i 16 -o 3 --output-digits .-/ 5717063
+/.-../---/...-/./
+```
+
+
+#### Built-in Digit Sets
+
+Several commonly used sets of digits are built-in. To use a built-in
+set, use the name of the wet with the `--digits` options and a `name:`
+prefix.
+
+```
+$ chrad -i 16 -o 64 --output-digits=name:base64 dea
+```
+
+The built-in digit sets are:
+```
+$ chrad --list-named-digits
+name:base62     ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+name:base64     ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
+name:base64url  ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_
+name:base32rfc  ABCDEFGHIJKLMNOPQRSTUVWXYZ234567
+name:base32     0123456789abcdefghijklmnopqrstuv
+name:base16     0123456789abcdef
+```
+
+The sets `base16` and `base32` are the common hexadecimal-style
+extension of the base 10 digits. The sets `base64`, `base64url`, and
+`base32rfc` are from [RFC 3548][rfc3548].
+
+[rfc3548]: https://datatracker.ietf.org/doc/html/rfc3548
+
+
+#### List Mode
+
+When converting numbers in very large bases, finding appropriate
+characters to use becomes difficult. To avoid this problem, use list
+mode. List mode can also make integration easier because it is a
+base-independent representation.
+
+List mode can be enabled for input, output, or both with
+`--input-list`, `--output-list`, and `-l/--list` respectively. When
+list mode is enabled, numbers are represented as a comma (`","`)
+separated list of base 10 integers.
+
+```
+$ chrad -i 10 -o 64 --output-list  16772988
+63,62,61,60
+
+$ chrad -i 64 -o 16 --input-list 3,30,43,27,59,47
+deadbeef
+
+$ chrad -i 8 -o 16 --list 5,4,3,2,1
+5,8,13,1
+```
+
+The comma separator can be changed to any character with the
+`--input-sep`, `--output-sep`, and `-s/--separator` options.
+
+```
+$ chrad -i 10 -o 64 --output-list --output-sep=: 16772988
+63:62:61:60
 ```
 
 
